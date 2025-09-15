@@ -21,6 +21,7 @@ export default function TimerApp() {
   const [isRunning, setIsRunning] = useState(false);
 
   const [workDuration, setWorkDuration] = useState(25);
+  const [breakDuration, setBreakDuration] = useState(5);
 
   // state to keep time left
   const [timeLeft, setTimeLeft] = useState({
@@ -38,7 +39,7 @@ export default function TimerApp() {
     setMode(newMode);
     // reset timer depends on mode
     setTimeLeft({
-      minutes: newMode === "work" ? workDuration : 5,
+      minutes: newMode === "work" ? workDuration : breakDuration,
       seconds: 0,
     });
     // stop timer
@@ -54,7 +55,7 @@ export default function TimerApp() {
   const handleReset = () => {
     setIsRunning(false);
     setTimeLeft({
-      minutes: mode === "work" ? workDuration : 5,
+      minutes: mode === "work" ? workDuration : breakDuration,
       seconds: 0,
     });
   };
@@ -95,7 +96,7 @@ export default function TimerApp() {
       <Card className="w-full max-w-md">
         <CardHeader>
           <CardTitle className="text-2xl font-bold text-center">
-            {mode === "work" ? "Work Time" : "Rest Time"}
+            {mode === "work" ? "Work Time" : "Break Time"}
           </CardTitle>
         </CardHeader>
         <CardContent className="flex flex-col items-center gap-6">
@@ -111,26 +112,55 @@ export default function TimerApp() {
             isRunning={isRunning}
           />
         </CardContent>
-        <CardFooter className="flex justify-center gap-2 items-center">
-          <label className="text-sm font-medium">work time</label>
-          <select
-            value={workDuration}
-            onChange={(e) => {
-              const newDuration = parseInt(e.target.value);
-              setWorkDuration(newDuration);
-              if (mode === "work" && !isRunning) {
-                setTimeLeft({ minutes: newDuration, seconds: 0 });
-              }
-            }}
-            className="p-2 border border-gray-300 rounded-md focus:outline-none
+        <CardFooter className="flex flex-col gap-4 w-full max-w-[200px] mx-auto">
+          {/* setting for work time */}
+          <div className="flex justify-center gap-2">
+            <label className="text-sm font-medium min-w-[4.5rem]">
+              work time
+            </label>
+            <select
+              value={workDuration}
+              onChange={(e) => {
+                const newDuration = parseInt(e.target.value);
+                setWorkDuration(newDuration);
+                if (mode === "work" && !isRunning) {
+                  setTimeLeft({ minutes: newDuration, seconds: 0 });
+                }
+              }}
+              className="p-2 border border-gray-300 rounded-md focus:outline-none
             focus:ring-2 focus:ring-blue-500"
-          >
-            {[5, 10, 15, 30, 45, 60].map((minutes) => (
-              <option key={minutes} value={minutes}>
-                {minutes}min
-              </option>
-            ))}
-          </select>
+            >
+              {[5, 10, 15, 25, 30, 45, 60].map((minutes) => (
+                <option key={minutes} value={minutes}>
+                  {minutes}min
+                </option>
+              ))}
+            </select>
+          </div>
+          {/* setting for break time */}
+          <div className="flex justify-center gap-2">
+            <label className="text-sm font-medium min-w-[4.5rem]">
+              break time
+            </label>
+            <select
+              value={breakDuration}
+              onChange={(e) => {
+                const newDuration = parseInt(e.target.value);
+                setBreakDuration(newDuration);
+                if (mode === "break" && !isRunning) {
+                  setTimeLeft({ minutes: newDuration, seconds: 0 });
+                }
+              }}
+              className="p-2 border border-gray-300 rounded-md focus:outline-none
+            focus:ring-2 focus:ring-blue-500"
+            >
+              {[5, 10, 15, 30].map((minutes) => (
+                <option key={minutes} value={minutes}>
+                  {minutes}min
+                </option>
+              ))}
+            </select>
+          </div>
         </CardFooter>
       </Card>
       <MetadataUpdater
