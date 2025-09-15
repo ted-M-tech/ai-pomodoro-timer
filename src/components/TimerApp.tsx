@@ -11,12 +11,24 @@ import TimerDisplay from "@/components/TimerDisplay";
 import Controls from "@/components/Controls";
 import MetadataUpdater from "./MetadataUpdater";
 import { useState, useEffect } from "react";
+import { useReward } from "react-rewards";
 import { playNotificationSound } from "@/utils/sound";
 
 // Define mode type
 type Mode = "work" | "break";
 
 export default function TimerApp() {
+  const { reward: confetti, isAnimating } = useReward(
+    "confettiReward",
+    "confetti",
+    {
+      elementCount: 100,
+      spread: 100,
+      decay: 0.93,
+      lifetime: 150,
+    }
+  );
+
   // state of running
   const [isRunning, setIsRunning] = useState(false);
 
@@ -73,6 +85,9 @@ export default function TimerApp() {
             if (prev.minutes === 0) {
               setIsRunning(false);
               toggleMode();
+              if (mode === "work") {
+                void confetti();
+              }
               void playNotificationSound();
               return prev;
             }
@@ -93,6 +108,10 @@ export default function TimerApp() {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-background p-4">
+      <span
+        id="confettiReward"
+        className="absolute top-1/2 -translate-x-1/2 -translate-y-1/2"
+      ></span>
       <Card className="w-full max-w-md">
         <CardHeader>
           <CardTitle className="text-2xl font-bold text-center">
