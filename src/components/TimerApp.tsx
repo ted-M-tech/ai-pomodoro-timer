@@ -1,7 +1,7 @@
 'use client';
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Timer } from "lucide-react";
+import TimerDisplay from "@/components/TimerDisplay";
 
 export default function TimerApp() {
     return (
@@ -10,8 +10,8 @@ export default function TimerApp() {
                 <CardHeader>
                     <CardTitle className="text-2xl font-bold text-center">Work Time</CardTitle>
                 </CardHeader>
-                <CardContent>
-                    25:00
+                <CardContent className="flex justify-center">
+                    <TimerDisplay minutes={25} seconds={0} />
                 </CardContent>
             </Card>
         </div>
