@@ -3,6 +3,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import TimerDisplay from "@/components/TimerDisplay";
 import Controls from "@/components/Controls";
+import MetadataUpdater from "./MetadataUpdater";
 import { useState, useEffect } from 'react';
 import { playNotificationSound } from "@/utils/sound";
 
@@ -97,6 +98,7 @@ export default function TimerApp() {
                     />
                 </CardContent>
             </Card>
+            <MetadataUpdater minutes={timeLeft.minutes} seconds={timeLeft.seconds} mode={mode} />
         </div>
     );
 }
