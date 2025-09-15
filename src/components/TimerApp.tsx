@@ -4,6 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import TimerDisplay from "@/components/TimerDisplay";
 import Controls from "@/components/Controls";
 import { useState, useEffect } from 'react';
+import { playNotificationSound } from "@/utils/sound";
 
 // Define mode type
 type Mode = 'work' | 'break';
@@ -13,7 +14,8 @@ export default function TimerApp() {
     const [isRunning, setIsRunning] = useState(false);
 
     // state to keep time left
-    const [timeLeft, setTimeLeft] = useState({ minutes: 25, seconds: 0 });
+    const [timeLeft, setTimeLeft] = useState({
+        minutes: 25, seconds: 0 });
 
     // state tp manage mode
     const [mode, setMode] = useState<Mode>('work');
@@ -40,7 +42,10 @@ export default function TimerApp() {
     // handler of reset button
     const handleReset = () => {
         setIsRunning(false)
-        setTimeLeft({ minutes: 25, seconds: 0 })
+        setTimeLeft({
+            minutes: mode === 'work' ? 25 : 5,
+            seconds: 0,
+        })
     }
 
     useEffect(() => {
@@ -55,6 +60,8 @@ export default function TimerApp() {
                         // case: minutes = 0
                         if (prev.minutes === 0) {
                             setIsRunning(false);
+                            toggleMode();
+                            void playNotificationSound();
                             return prev;
                         }
                         // minutes is still left, decrease 1 from minutes and reset seconds to 59 
@@ -62,7 +69,7 @@ export default function TimerApp() {
                     }
                     return { ...prev, seconds: prev.seconds - 1 };
                 });
-            }, 1000);
+            }, 1); // to check behavior, change time speed
         }
         // clean up function
         return () => {
