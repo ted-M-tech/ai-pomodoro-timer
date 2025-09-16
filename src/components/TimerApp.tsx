@@ -7,6 +7,7 @@ import {
   CardTitle,
   CardFooter,
 } from "@/components/ui/card";
+import { Switch } from "@/components/ui/switch";
 import TimerDisplay from "@/components/TimerDisplay";
 import Controls from "@/components/Controls";
 import MetadataUpdater from "./MetadataUpdater";
@@ -33,6 +34,7 @@ export default function TimerApp() {
   const [isRunning, setIsRunning] = useState(false);
 
   const [workDuration, setWorkDuration] = useState(25);
+
   const [breakDuration, setBreakDuration] = useState(5);
 
   // state to keep time left
@@ -41,8 +43,11 @@ export default function TimerApp() {
     seconds: 0,
   });
 
-  // state tp manage mode
+  // state to manage mode
   const [mode, setMode] = useState<Mode>("work");
+
+  // state to mange auto start
+  const [autoStart, setAutoStart] = useState(false);
 
   // function to change mode
   const toggleMode = () => {
@@ -55,7 +60,7 @@ export default function TimerApp() {
       seconds: 0,
     });
     // stop timer
-    setIsRunning(false);
+    setIsRunning(autoStart);
   };
 
   // handler of start button
@@ -84,11 +89,15 @@ export default function TimerApp() {
             // case: minutes = 0
             if (prev.minutes === 0) {
               setIsRunning(false);
-              toggleMode();
               if (mode === "work") {
                 void confetti();
               }
               void playNotificationSound();
+              // wait some time
+              setTimeout(() => {
+                toggleMode();
+              }, 100);
+
               return prev;
             }
             // minutes is still left, decrease 1 from minutes and reset seconds to 59
@@ -179,6 +188,17 @@ export default function TimerApp() {
                 </option>
               ))}
             </select>
+          </div>
+
+          {/* setting for auto start */}
+          <div className="flex items-center gap-2 w-full justify-between">
+            <label className="text-sm font-medium min-w-[4.5rem]">
+              auto start
+            </label>
+            <Switch
+              checked={autoStart}
+              onCheckedChange={() => setAutoStart(!autoStart)}
+            ></Switch>
           </div>
         </CardFooter>
       </Card>
