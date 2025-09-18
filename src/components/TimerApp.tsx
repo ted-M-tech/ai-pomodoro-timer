@@ -120,7 +120,7 @@ export default function TimerApp() {
           }
           return { ...prev, seconds: prev.seconds - 1 };
         });
-      }, 1); // to check behavior, change time speed
+      }, 1000); // when check behavior, change time speed
     }
     // clean up function
     return () => {
