@@ -24,7 +24,7 @@ const promppt = `
 
     const response = await ai.models.generateContent({
         model: "gemini-2.5-flash-lite",
-        contents: "Suggest refresh method in 1 line",
+        contents: "Suggest body or mental refresh way only in one sentence",
     });
     // console.log(response.text);
     return NextResponse.json({ suggestion: response.text }, { status: 200 })

@@ -66,7 +66,15 @@ export default function TimerApp() {
       minutes: newMode === "work" ? workDuration : breakDuration,
       seconds: 0,
     });
-    // stop timer
+
+    // set gemini ai suggestion
+    if (newMode === "break") {
+      generateRefreshSuggestion()
+        .then((suggestion) => setRefreshSuggestion(suggestion))
+        .catch(console.error);
+    }
+
+    // start timer
     setIsRunning(autoStart);
   };
 
@@ -224,7 +232,7 @@ export default function TimerApp() {
         mode={mode}
       />
       <RefreshSuggestion
-        suggestion={"hogehoge"}
+        suggestion={refreshSuggestion}
         onClose={() => setRefreshSuggestion(null)}
       />
     </div>
